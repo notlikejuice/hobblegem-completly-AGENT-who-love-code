@@ -53,6 +53,8 @@ interface CliArgs {
   telemetryTarget: string | undefined;
   telemetryOtlpEndpoint: string | undefined;
   telemetryLogPrompts: boolean | undefined;
+  openaiKey: string | undefined;
+  provider: string | undefined;
 }
 
 async function parseArguments(): Promise<CliArgs> {
@@ -122,6 +124,15 @@ async function parseArguments(): Promise<CliArgs> {
       description:
         'Enable or disable logging of user prompts for telemetry. Overrides settings files.',
     })
+    .option('openai-key', {
+      type: 'string',
+      description: 'OpenAI API key',
+    })
+    .option('provider', {
+      type: 'string',
+      choices: ['gemini', 'openai'],
+      description: 'Select backend provider',
+    })
     .option('checkpointing', {
       alias: 'c',
       type: 'boolean',
@@ -133,6 +144,13 @@ async function parseArguments(): Promise<CliArgs> {
     .help()
     .alias('h', 'help')
     .strict().argv;
+
+  if (argv.openaiKey) {
+    process.env.OPENAI_API_KEY = argv.openaiKey;
+  }
+  if (argv.provider) {
+    process.env.LLM_PROVIDER = argv.provider;
+  }
 
   return argv;
 }

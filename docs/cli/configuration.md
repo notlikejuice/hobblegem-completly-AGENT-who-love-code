@@ -235,6 +235,9 @@ The CLI automatically loads environment variables from an `.env` file. The loadi
   - Your API key for the Gemini API.
   - **Crucial for operation.** The CLI will not function without it.
   - Set this in your shell profile (e.g., `~/.bashrc`, `~/.zshrc`) or an `.env` file.
+- **`OPENAI_API_KEY`**:
+  - API key for using OpenAI models.
+  - Example: `export OPENAI_API_KEY="sk-..."`
 - **`GEMINI_MODEL`**:
   - Specifies the default Gemini model to use.
   - Overrides the hardcoded default
