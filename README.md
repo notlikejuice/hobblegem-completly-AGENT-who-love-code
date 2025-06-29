@@ -49,6 +49,13 @@ If you need to use a specific model or require a higher request capacity, you ca
    export GEMINI_API_KEY="YOUR_API_KEY"
    ```
 
+You can also use OpenAI models by providing an OpenAI API key:
+
+```bash
+export OPENAI_API_KEY="YOUR_OPENAI_KEY"
+gemini --provider openai
+```
+
 For other authentication methods, including Google Workspace accounts, see the [authentication](./docs/cli/authentication.md) guide.
 
 ## Examples
