@@ -41,6 +41,8 @@ const logger = {
 
 interface CliArgs {
   model: string | undefined;
+  provider: string | undefined;
+  'openai-key': string | undefined;
   sandbox: boolean | string | undefined;
   'sandbox-image': string | undefined;
   debug: boolean | undefined;
@@ -62,6 +64,16 @@ async function parseArguments(): Promise<CliArgs> {
       type: 'string',
       description: `Model`,
       default: process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL,
+    })
+    .option('provider', {
+      type: 'string',
+      choices: ['gemini', 'openai'],
+      description: 'LLM provider',
+      default: 'gemini',
+    })
+    .option('openai-key', {
+      type: 'string',
+      description: 'OpenAI API key',
     })
     .option('prompt', {
       alias: 'p',
@@ -170,6 +182,11 @@ export async function loadCliConfig(
 
   const argv = await parseArguments();
   const debugMode = argv.debug || false;
+
+  if (argv.provider === 'openai' && argv['openai-key']) {
+    process.env.OPENAI_API_KEY = argv['openai-key'];
+    process.env.GEMINI_API_KEY = '';
+  }
 
   // Set the context filename in the server's memoryTool module BEFORE loading memory
   // TODO(b/343434939): This is a bit of a hack. The contextFileName should ideally be passed

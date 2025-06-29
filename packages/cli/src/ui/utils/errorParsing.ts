@@ -12,6 +12,8 @@ const RATE_LIMIT_ERROR_MESSAGE_USE_GEMINI =
   '\nPlease wait and try again later. To increase your limits, request a quota increase through AI Studio, or switch to another /auth method';
 const RATE_LIMIT_ERROR_MESSAGE_VERTEX =
   '\nPlease wait and try again later. To increase your limits, request a quota increase through Vertex, or switch to another /auth method';
+const RATE_LIMIT_ERROR_MESSAGE_OPENAI =
+  '\nPlease wait and try again later or upgrade your OpenAI plan.';
 const RATE_LIMIT_ERROR_MESSAGE_DEFAULT =
   'Your request has been rate limited. Please wait and try again later.';
 
@@ -51,6 +53,8 @@ function getRateLimitMessage(authType?: AuthType): string {
       return RATE_LIMIT_ERROR_MESSAGE_USE_GEMINI;
     case AuthType.USE_VERTEX_AI:
       return RATE_LIMIT_ERROR_MESSAGE_VERTEX;
+    case AuthType.USE_OPENAI:
+      return RATE_LIMIT_ERROR_MESSAGE_OPENAI;
     default:
       return RATE_LIMIT_ERROR_MESSAGE_DEFAULT;
   }
