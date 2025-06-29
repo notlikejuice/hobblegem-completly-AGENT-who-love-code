@@ -38,6 +38,7 @@ export enum AuthType {
   LOGIN_WITH_GOOGLE_PERSONAL = 'oauth-personal',
   USE_GEMINI = 'gemini-api-key',
   USE_VERTEX_AI = 'vertex-ai',
+  USE_OPENAI = 'openai',
 }
 
 export type ContentGeneratorConfig = {
@@ -54,6 +55,7 @@ export async function createContentGeneratorConfig(
 ): Promise<ContentGeneratorConfig> {
   const geminiApiKey = process.env.GEMINI_API_KEY;
   const googleApiKey = process.env.GOOGLE_API_KEY;
+  const openaiApiKey = process.env.OPENAI_API_KEY;
   const googleCloudProject = process.env.GOOGLE_CLOUD_PROJECT;
   const googleCloudLocation = process.env.GOOGLE_CLOUD_LOCATION;
 
@@ -78,6 +80,11 @@ export async function createContentGeneratorConfig(
       contentGeneratorConfig.model,
     );
 
+    return contentGeneratorConfig;
+  }
+
+  if (authType === AuthType.USE_OPENAI && openaiApiKey) {
+    contentGeneratorConfig.apiKey = openaiApiKey;
     return contentGeneratorConfig;
   }
 
@@ -124,6 +131,13 @@ export async function createContentGenerator(
     });
 
     return googleGenAI.models;
+  }
+
+  if (config.authType === AuthType.USE_OPENAI && config.apiKey) {
+    const { OpenAIContentGenerator } = await import(
+      './openaiContentGenerator.js'
+    );
+    return new OpenAIContentGenerator(config.apiKey, config.model);
   }
 
   throw new Error(
